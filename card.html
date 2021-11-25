@@ -1,0 +1,63 @@
+<html>
+<body>
+
+<input id='count'>
+<button onclick="getCards()">Repartir</button>
+<button onclick="drawCard()">Robar</button>
+
+<p>Quedan:</p>
+<p id='remaining'></p>
+<h1>Mano:</h1>
+<div id='hand'></div>
+
+<script>
+    const url = 'http://deckofcardsapi.com/api';
+    let deckId = null;
+
+    async function getCards() {
+        const inputCount = document.getElementById("count").value || 1;
+
+        try {
+            const resp = await fetch(`${url}/deck/new/draw/?count=${inputCount}`);
+            const parsedResp = await resp.json();
+
+            console.log(parsedResp)
+            deckId = parsedResp.deck_id;
+            document.getElementById("remaining").innerHTML = parsedResp.remaining;
+
+            const hand = document.getElementById("hand");
+            hand.innerHTML = '';
+
+            for (const card of parsedResp.cards) {
+                const cardElement = document.createElement("img");
+                cardElement.src = card.image;
+                hand.appendChild(cardElement);
+            }
+        } catch (error) {
+            console.log(error)
+            alert('Error!');
+        }
+    }
+
+    async function drawCard() {
+        try {
+            const resp = await fetch(`${url}/deck/${deckId}/draw/?count=10`);
+            const parsedResp = await resp.json();
+
+            const hand = document.getElementById("hand");
+            document.getElementById("remaining").innerHTML = parsedResp.remaining;
+
+            for (const card of parsedResp.cards) {
+                const cardElement = document.createElement("img");
+                cardElement.src = card.image;
+                hand.appendChild(cardElement);
+            }
+        } catch (error) {
+            console.log(error)
+            alert('Error!');
+        }
+    }
+</script>
+
+</body>
+</html>

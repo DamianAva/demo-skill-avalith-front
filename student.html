@@ -1,0 +1,87 @@
+<html>
+<body>
+
+<p>Nombre:</p><input id='name'>
+<p>Edad:</p><input id='age'>
+<p>DNI:</p><input id='dni'>
+<button onclick="sendStudent()">Enviar</button>
+<button onclick="listStudents()">Listar</button>
+<p>ID:</p><input id='id'>
+<button onclick="deleteStudent()">Borrar</button>
+<div id='status'>Status:</div>
+<div id='list'></div>
+
+<script>
+    const url = 'http://localhost:3000';
+
+    async function sendStudent() {
+        const name = document.getElementById("name").value;
+        const age = document.getElementById("age").value;
+        const dni = document.getElementById("dni").value;
+
+        try {
+            const student = {
+                name,
+                age,
+                dni
+            }
+
+            await fetch(`${url}/student`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(student),
+            });
+
+            document.getElementById("status").innerHTML = `Status: OK!`;
+        } catch (error) {
+            console.log(error)
+            document.getElementById("status").innerHTML = `Status: ERROR!`;
+        }
+    }
+
+    async function listStudents() {
+        try {
+            const resp = await fetch(`${url}/student/list`);
+            const parsedResp = await resp.json();
+
+            console.log(parsedResp);
+
+            const list = document.getElementById("list");
+            list.innerHTML = '';
+
+            for (const student of parsedResp) {
+                const studentElement = document.createElement("p");
+                studentElement.innerHTML = `ID: ${student.id} - Nombre: ${student.name} - Edad: ${student.age || '--'} - DNI: ${student.dni}`;
+                list.appendChild(studentElement);
+            }
+        } catch (error) {
+            console.log(error)
+            alert('Error!');
+        }
+    }
+
+    async function deleteStudent() {
+        const id = document.getElementById("id").value;
+
+        try {
+            const resp = await fetch(`${url}/student/${id}`, {
+                method: 'DELETE'
+            });
+
+            console.log(resp)
+            if (resp.status !== 200) {
+                document.getElementById("status").innerHTML = `Status: ${resp.status}`;
+            } else {
+                document.getElementById("status").innerHTML = `Status: OK!`;
+            }
+        } catch (error) {
+            console.log(error)
+            document.getElementById("status").innerHTML = `Status: ERROR!`;
+        }
+    }
+</script>
+
+</body>
+</html>

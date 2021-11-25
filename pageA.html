@@ -1,0 +1,25 @@
+<html>
+<body>
+
+<h1>Pagina A</h1>
+<a href='./pageB.html'>Link B</a>
+<h2 id='position'></h2>
+<h2 id='host'></h2>
+<h2 id='pathname'></h2>
+
+<button onclick="redirect()">Redireccionar</button>
+
+<script>
+    document.getElementById("position").innerHTML = `Estamos en ${window.location.href}`;
+    document.getElementById("host").innerHTML = `El hostname es ${window.location.hostname}`;
+    document.getElementById("pathname").innerHTML = `El pathname es ${window.location.pathname}`;
+    
+    console.log(window.location)
+
+    function redirect() {
+        window.location.assign("./pageB.html");
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<html>
+<body>
+
+Sin memoria:
+<input id='count'>
+<button onclick="count()">+1</button>
+<button onclick="reset()">Reset</button><br>
+
+En el localStorage:
+<input id='storage'>
+<button onclick="countStorage()">+1</button>
+<button onclick="resetStorage()">Reset</button><br>
+
+En el sessionStorage:
+<input id='session'>
+<button onclick="countSession()">+1</button>
+<button onclick="resetSession()">Reset</button><br>
+
+<script>
+
+let countValue = 0;
+document.getElementById("count").value = countValue;
+
+let storageValue = localStorage.getItem("storageValue") || 0;
+document.getElementById("storage").value = storageValue;
+
+let sessionValue = sessionStorage.getItem("sessionValue") || 0;
+document.getElementById("session").value = sessionValue;
+
+function count() {
+    document.getElementById("count").value = ++countValue;
+}
+
+function reset() {
+    countValue = 0;
+    document.getElementById("count").value = countValue;
+}
+
+function countStorage() {
+    document.getElementById("storage").value = ++storageValue;
+    localStorage.setItem("storageValue", storageValue);
+}
+
+function resetStorage() {
+    storageValue = 0;
+    document.getElementById("storage").value = storageValue;
+    localStorage.removeItem("storageValue");
+}
+
+function countSession() {
+    document.getElementById("session").value = ++sessionValue;
+    sessionStorage.setItem("sessionValue", sessionValue);
+}
+
+function resetSession() {
+    sessionValue = 0;
+    document.getElementById("session").value = sessionValue;
+    sessionStorage.removeItem("sessionValue");
+}
+
+</script>
+
+</body>
+</html>

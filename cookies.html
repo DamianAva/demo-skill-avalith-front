@@ -1,0 +1,77 @@
+<html>
+<body>
+
+User:<input id='email'><br>
+Password:<input id='password' type='password'><br>
+<button onclick="login()">Login</button>
+<div id='status'>Status:</div>
+<div id='token'>Token:</div><br>
+
+<button onclick="verify()">Verificar</button>
+<div id='verifyText'></div>
+
+<script>
+    const url = 'http://localhost:3000';
+
+    document.getElementById("token").innerHTML = `Token: ${localStorage.getItem("token") || '--'}`;
+
+    async function login() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            const user = {
+                email,
+                password
+            }
+
+            const resp = await fetch(`${url}/user/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user),
+            });
+            const parsedResp = await resp.json();
+
+            if (resp.status !== 200) {
+                document.getElementById("status").innerHTML = `Status: ${resp.status}`;
+            } else {
+                localStorage.setItem("token", parsedResp.token);
+                // document.cookie = "token=" + parsedResp.token
+                console.log(document.cookie)
+                document.getElementById("token").innerHTML = `Token: ${parsedResp.token}`;
+
+                document.getElementById("status").innerHTML = `Status: OK!`;
+            }
+        } catch (error) {
+            console.log(error)
+            document.getElementById("status").innerHTML = `Status: ERROR!`;
+        }
+    }
+
+    async function verify() {
+        try {
+            const token = localStorage.getItem("token");
+
+            const resp = await fetch(`${url}/user/verify`, {
+                method: 'GET',
+                /* headers: {
+                    'Authorization': token,
+                }, */
+            });
+
+            if (resp.status === 200) {
+                document.getElementById("verifyText").innerHTML = `Verificacion correcta!`;
+            } else {
+                document.getElementById("verifyText").innerHTML = `Verificacion incorrecta!`;
+            }
+        } catch (error) {
+            console.log(error)
+            document.getElementById("verifyText").innerHTML = `Verificacion erronea!`;
+        }
+    }
+</script>
+
+</body>
+</html>

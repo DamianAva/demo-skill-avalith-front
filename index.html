@@ -1,0 +1,52 @@
+<html>
+<body>
+
+<p id="demo" class="ejemplo-clase otra-clase"></p>
+<p id="test">Test</p>
+<p id="damian"></p>
+
+<img src="image.png" alt="Imagen Ejemplo" class="ejemplo-clase">
+
+<h1 onclick="changeText(this)">Haceme click!</h1>
+
+<h1 onmouseover="changeText(this)">Pasa el mouse!</h1>
+
+<h1 onmousedown="changeText(this)" onmouseup="changeTextAgain(this)">Sostene el click!</h1>
+
+<h1 id='sin-evento'>Sin evento!</h1>
+
+<button onclick="addEvent(this)">Boton</button>
+
+<script>
+    function changeText(element) {
+        console.log(element)
+        element.innerHTML = "Magia!";
+    }
+
+    function changeTextAgain(id) {
+        id.innerHTML = "No mas magia!";
+    }
+
+    function addEvent() {
+        document.getElementById('sin-evento').addEventListener("click", () => {
+            document.getElementById('sin-evento').innerHTML = "Ahora si con magia!";
+        });
+    }
+
+    document.getElementById("demo").innerHTML = "Este es el demo!";
+    document.getElementById("damian").innerHTML = document.getElementById("test").innerHTML;
+
+    const elementsByTag = document.getElementsByTagName('p');
+
+    for (const elementByTag of elementsByTag) {
+        console.log(elementByTag);
+        console.log(elementByTag.innerHTML);
+    }
+
+    const elementsByClass = document.getElementsByClassName('ejemplo-clase');
+
+    console.log(elementsByClass);
+</script>
+
+</body>
+</html>
